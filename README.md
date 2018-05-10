@@ -1,5 +1,5 @@
-[GitHub](https://github.com/nephatrine/docker-nginx-lemp) |
-[DockerHub](https://hub.docker.com/r/nephatrine/nginx-lemp/) |
+[GitHub](https://github.com/nephatrine/docker-gravcms) |
+[DockerHub](https://hub.docker.com/r/nephatrine/gravcms/) |
 [unRAID](https://github.com/nephatrine/unraid-docker-templates)
 
 # Grav CMS Docker
