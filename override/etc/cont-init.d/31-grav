@@ -1,15 +1,14 @@
 #!/usr/bin/with-contenv bash
 
-if [[ ! -f /usr/lib/php/composer.phar ]]; then
-  if [[ ! -f /usr/src/composer.phar ]]; then
-    cd /usr/src
-    wget https://raw.githubusercontent.com/composer/getcomposer.org/master/web/installer -O - -q | php -- --quiet
-  fi
-  mv /usr/src/composer.phar /usr/lib/php/composer.phar
-  chown guardian:users /root && chown -R guardian:users /root/.composer
-fi
-
 if [[ ! -d /mnt/config/www/grav ]]; then
+  if [[ ! -f /usr/lib/php/composer.phar ]]; then
+    if [[ ! -f /usr/src/composer.phar ]]; then
+      cd /usr/src
+      wget https://raw.githubusercontent.com/composer/getcomposer.org/master/web/installer -O - -q | php -- --quiet
+    fi
+    mv /usr/src/composer.phar /usr/lib/php/composer.phar
+    chown guardian:users /root && chown -R guardian:users /root/.composer
+  fi
   cd /mnt/config/www
   s6-setuidgid guardian /usr/lib/php/composer.phar create-project getgrav/grav /mnt/config/www/grav
   cd grav
@@ -19,5 +18,5 @@ if [[ ! -d /mnt/config/www/grav ]]; then
   s6-setuidgid guardian ./bin/gpm -y install pagination
   s6-setuidgid guardian ./bin/gpm -y install simplesearch
   s6-setuidgid guardian ./bin/gpm -y install sitemap
-  echo 'Sitemap: /sitemap.xml' >>robots.txt
+  echo 'Sitemap: /sitemap.xml' >>/mnt/config/www/grav/robots.txt
 fi
