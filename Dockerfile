@@ -1,4 +1,4 @@
-FROM nephatrine/nginx-lemp:latest
+FROM nephatrine/base-php7:latest
 LABEL maintainer="Daniel Wolf <nephatrine@gmail.com>"
 
 RUN echo "====== NOT MUCH TO DO ======" \
