@@ -19,4 +19,10 @@ if [[ ! -d /mnt/config/www/grav ]]; then
   s6-setuidgid guardian ./bin/gpm -y install simplesearch
   s6-setuidgid guardian ./bin/gpm -y install sitemap
   echo 'Sitemap: /sitemap.xml' >>/mnt/config/www/grav/robots.txt
+elif [[ -f /mnt/config/etc/update-grav.always || -f /mnt/config/etc/update-grav.once ]]; then
+  if [[ -f /mnt/config/etc/update-grav.once ]]; then rm -f /mnt/config/etc/update-grav.once; fi
+  cd /mnt/config/www/grav
+  s6-setuidgid guardian ./bin/grav composer
+  s6-setuidgid guardian ./bin/gpm -y update && s6-setuidgid guardian ./bin/gpm -y self-upgrade && rm -f /mnt/config/www/grav/backup/*.zip
+  s6-setuidgid guardian ./bin/grav backup
 fi
