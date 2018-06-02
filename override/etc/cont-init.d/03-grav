@@ -1,5 +1,7 @@
 #!/usr/bin/with-contenv bash
 
+HOME=/mnt/config/home
+
 if [[ ! -d /mnt/config/www/grav ]]; then
   if [[ ! -f /usr/lib/php/composer.phar ]]; then
     if [[ ! -f /usr/src/composer.phar ]]; then
@@ -19,7 +21,7 @@ if [[ ! -d /mnt/config/www/grav ]]; then
   s6-setuidgid guardian ./bin/gpm -y install simplesearch
   s6-setuidgid guardian ./bin/gpm -y install sitemap
   echo 'Sitemap: /sitemap.xml' >>/mnt/config/www/grav/robots.txt
-elif [[ -f /mnt/config/etc/update-grav.always || -f /mnt/config/etc/update-grav.once ]]; then
+elif [[ -f /mnt/config/etc/update-grav || -f /mnt/config/etc/update-grav.once ]]; then
   if [[ -f /mnt/config/etc/update-grav.once ]]; then rm -f /mnt/config/etc/update-grav.once; fi
   cd /mnt/config/www/grav
   s6-setuidgid guardian ./bin/grav composer
