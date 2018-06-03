@@ -1,7 +1,5 @@
 #!/usr/bin/with-contenv bash
 
-HOME=/mnt/config/home
-
 if [[ ! -d /mnt/config/www/grav ]]; then
   if [[ ! -f /usr/lib/php/composer.phar ]]; then
     if [[ ! -f /usr/src/composer.phar ]]; then
@@ -12,19 +10,19 @@ if [[ ! -d /mnt/config/www/grav ]]; then
     chown guardian:users /root && chown -R guardian:users /root/.composer
   fi
   cd /mnt/config/www
-  s6-setuidgid guardian /usr/lib/php/composer.phar create-project getgrav/grav /mnt/config/www/grav
+  HOME=/mnt/config/home s6-setuidgid guardian /usr/lib/php/composer.phar create-project getgrav/grav /mnt/config/www/grav
   cd grav
-  s6-setuidgid guardian ./bin/gpm -y install admin
-  s6-setuidgid guardian ./bin/gpm -y install cookieconsent
-  s6-setuidgid guardian ./bin/gpm -y install external_links
-  s6-setuidgid guardian ./bin/gpm -y install pagination
-  s6-setuidgid guardian ./bin/gpm -y install simplesearch
-  s6-setuidgid guardian ./bin/gpm -y install sitemap
+  HOME=/mnt/config/home s6-setuidgid guardian ./bin/gpm -y install admin
+  HOME=/mnt/config/home s6-setuidgid guardian ./bin/gpm -y install cookieconsent
+  HOME=/mnt/config/home s6-setuidgid guardian ./bin/gpm -y install external_links
+  HOME=/mnt/config/home s6-setuidgid guardian ./bin/gpm -y install pagination
+  HOME=/mnt/config/home s6-setuidgid guardian ./bin/gpm -y install simplesearch
+  HOME=/mnt/config/home s6-setuidgid guardian ./bin/gpm -y install sitemap
   echo 'Sitemap: /sitemap.xml' >>/mnt/config/www/grav/robots.txt
 elif [[ -f /mnt/config/etc/update-grav || -f /mnt/config/etc/update-grav.once ]]; then
   if [[ -f /mnt/config/etc/update-grav.once ]]; then rm -f /mnt/config/etc/update-grav.once; fi
   cd /mnt/config/www/grav
-  s6-setuidgid guardian ./bin/grav composer
-  s6-setuidgid guardian ./bin/gpm -y update && s6-setuidgid guardian ./bin/gpm -y self-upgrade && rm -f /mnt/config/www/grav/backup/*.zip
-  s6-setuidgid guardian ./bin/grav backup
+  HOME=/mnt/config/home s6-setuidgid guardian ./bin/grav composer
+  HOME=/mnt/config/home s6-setuidgid guardian ./bin/gpm -y update && s6-setuidgid guardian ./bin/gpm -y self-upgrade && rm -f /mnt/config/www/grav/backup/*.zip
+  HOME=/mnt/config/home s6-setuidgid guardian ./bin/grav backup
 fi
