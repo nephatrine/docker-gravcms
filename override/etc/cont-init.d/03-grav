@@ -19,10 +19,14 @@ if [[ ! -d /mnt/config/www/grav ]]; then
   HOME=/mnt/config/home s6-setuidgid guardian ./bin/gpm -y install simplesearch
   HOME=/mnt/config/home s6-setuidgid guardian ./bin/gpm -y install sitemap
   echo 'Sitemap: /sitemap.xml' >>/mnt/config/www/grav/robots.txt
+  chown -R guardian:users /mnt/config/www/grav
 elif [[ -f /mnt/config/etc/update-grav || -f /mnt/config/etc/update-grav.once ]]; then
   if [[ -f /mnt/config/etc/update-grav.once ]]; then rm -f /mnt/config/etc/update-grav.once; fi
   cd /mnt/config/www/grav
-  HOME=/mnt/config/home s6-setuidgid guardian ./bin/grav composer
-  HOME=/mnt/config/home s6-setuidgid guardian ./bin/gpm -y update && s6-setuidgid guardian ./bin/gpm -y self-upgrade && rm -f /mnt/config/www/grav/backup/*.zip
+  HOME=/mnt/config/home s6-setuidgid guardian ./bin/grav backup && \
+  HOME=/mnt/config/home s6-setuidgid guardian ./bin/grav composer && \
+  HOME=/mnt/config/home s6-setuidgid guardian ./bin/gpm -y self-upgrade && \
+  HOME=/mnt/config/home s6-setuidgid guardian ./bin/gpm -y update && \
   HOME=/mnt/config/home s6-setuidgid guardian ./bin/grav backup
+  find /mnt/config/www/grav/backup/ -maxdepth 1 -type f -name *.zip | sort | tail -n +7 | xargs -0 rm -f --
 fi
